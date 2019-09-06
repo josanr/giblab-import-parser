@@ -1,9 +1,50 @@
 import * as fs from 'fs';
 import * as iconv from 'iconv-lite';
 import {parseString} from 'xml2js';
+import {GoodsSync} from "./GoodsSync";
+import {DrillParsed, DrillPoint} from "./DrillType";
 
-class CncExtra {
+
+const FRONT = 0;
+const RIGHT = 1;
+const TOP = 2;
+const LEFT = 3;
+const BOTTOM = 4;
+const BACK = 5;
+
+const cncActs: { [s: string]: string } = {
+    ms: "actions",
+    ma: "actions",
+    ml: "actions",
+    mac: "actions",
+    mf: "actions",
+    ma3p: "actions",
+};
+
+
+class NotchItem {
+
+    private depth: number;
+    private indent: number;
+    private width: number;
+    private face: boolean;
+    private byLength: boolean;
+
+    constructor(
+        depth: number,
+        indent: number,
+        width: number,
+        face: boolean,
+        byLength: boolean
+    ) {
+        this.depth = depth;
+        this.indent = indent;
+        this.width = width;
+        this.face = face;
+        this.byLength = byLength;
+    }
 }
+
 
 class Part {
     gid: number;
@@ -23,91 +64,77 @@ class Part {
     isGlue: boolean = false;
     isCNC: boolean = false;
     DrillExtra: DrillParsed;
-    cncExtra: CncExtra;
+    CncExtra: CncExtra = new CncExtra();
+    NotchExtra: Array<NotchItem> = [];
 }
 
+class CncExtra {
+    items: Array<CncItem> = [];
 
-class DrillParsed {
-    totalCount: number = 0;
-    countByDiam: { [key: number]: number } = {};
-    items: Array<DrillPoint> = [];
-
-    public add(point: DrillPoint) {
-        this.totalCount++;
-        if (this.countByDiam[point.diameter] === undefined) {
-            this.countByDiam[point.diameter] = 0;
-        }
-        this.countByDiam[point.diameter]++;
-        this.items.push(point);
+    getPath(): string {
+        return "hello";
     }
 
-
+    add(item: CncItem) {
+        this.items.push(item)
+    }
 }
 
-const FRONT = 0;
-const RIGHT = 1;
-const TOP = 2;
-const LEFT = 3;
-const BOTTOM = 4;
-const BACK = 5;
-
-class DrillPoint {
-    type: string = "BV";
-    /**
-     * Тыл - 5
-     * W1 - 3
-     * L2 - 4
-     * W2 - 1
-     * L1 - 2
-     * Лицо - 0
-     */
-
-    side: 0 | 1 | 2 | 3 | 4 | 5 = 0;
-    corner: Array<number> = [];
+class CncItem {
     x: number;
     y: number;
-    z: number;
+    pathCenter: number;
     depth: number;
-    diameter: number;
-    repeatType: number = 0;
-    repDX: number = 0;
-    repDy: number = 0;
-    repCount: number = 0;
-    directionX: number = 0;
-    directionY: number = 0;
-    directionZ: number = 0;
-}
 
 
-class GoodsSync {
-    private readonly _modelName: string;
-    private readonly _modelId: number;
-
-    private _gid: number;
-
-    constructor(modelId: number, modelName: string) {
-        this._modelId = modelId;
-        this._modelName = modelName;
-        this._gid = 0;
-    }
-
-    get modelId(): number {
-        return this._modelId;
-    }
-
-    get modelName(): string {
-        return this._modelName;
-    }
-
-    get gid(): number {
-        return this._gid;
-    }
-
-    set gid(value: number) {
-        this._gid = value;
+    constructor(x: number, y: number, pathCenter: number, depth: number) {
+        this.x = x;
+        this.y = y;
+        this.pathCenter = pathCenter;
+        this.depth = depth;
     }
 }
 
+
+class StartPoint extends CncItem {
+    inType: number;
+    outType: number;
+
+    constructor(x: number, y: number, pathCenter: number, depth: number, inType: number, outType: number) {
+        super(x, y, pathCenter, depth);
+        this.inType = inType;
+        this.outType = outType;
+    }
+}
+
+class Arc extends CncItem {
+    radius: number;
+    direction: boolean;
+
+    constructor(x: number, y: number, pathCenter: number, depth: number, radius: number, direction: boolean) {
+        super(x, y, pathCenter, depth);
+        this.radius = radius;
+        this.direction = direction;
+    }
+}
+
+class Line extends CncItem {
+
+    constructor(x: number, y: number, pathCenter: number, depth: number) {
+        super(x, y, pathCenter, depth);
+    }
+}
+
+class EndPointArc extends Arc {
+    centerX: number;
+    centerY: number;
+
+    constructor(x: number, y: number, pathCenter: number, depth: number, direction: boolean, centerX: number, centerY: number) {
+        super(x, y, pathCenter, depth, 0, direction);
+        this.centerX = centerX;
+        this.centerY = centerY;
+    }
+}
 
 class GibLabParser {
     private basePath: string;
@@ -129,9 +156,135 @@ class GibLabParser {
 
             this.inflateDrillXNC(data);
 
+            this.inflateNotchXNC(data);
+
+            this.inflateCNC(data);
+
 
         });
 
+    }
+
+    private inflateCNC(data: any) {
+        for (let idx in data.project.operation) {
+            const item = data.project.operation[idx];
+            if (item.typeId !== 'XNC') {
+                continue;
+            }
+            const partId = +item.part.id;
+            const part = this.partsList[partId];
+
+            const lines = item.program.split("><");
+            for (const lid in lines) {
+                const line = lines[lid];
+
+                if (cncActs[line.split(" ")[0]] !== undefined) {
+                    part.isCNC = true;
+                    parseString("<" + line + ">", {explicitArray: false, mergeAttrs: true}, (err, result) => {
+                        const itemType = Object.keys(result)[0];
+                        let item: CncItem;
+                        switch (itemType) {
+                            case "ms":
+                                item = new StartPoint(
+                                    +result["ms"].x,
+                                    +result["ms"].y,
+                                    +result["ms"].c,
+                                    +result["ms"].dp,
+                                    +result["ms"].in,
+                                    +result["ms"].out,
+                                );
+                                break;
+                            case "ma":
+                                item = new Arc(
+                                    +result["ma"].x,
+                                    +result["ma"].y,
+                                    +result["ma"].c,
+                                    +result["ma"].dp,
+                                    +result["ma"].r,
+                                    result["ma"].dir,
+                                );
+                                break;
+                            case "ml":
+                                item = new Line(
+                                    +result["ml"].x,
+                                    +result["ml"].y,
+                                    +result["ml"].c,
+                                    +result["ml"].dp
+                                );
+                                break;
+                            case "mac":
+                                item = new EndPointArc(
+                                    +result["mac"].x,
+                                    +result["mac"].y,
+                                    +result["mac"].c,
+                                    +result["mac"].dp,
+                                    result["mac"].dir,
+                                    +result["mac"].cx,
+                                    +result["mac"].cy
+                                );
+                                break;
+                            case "mf":
+                                console.log("rounding - not implemented");
+                                break;
+                            case "ma3p":
+                                console.log("3point arc not implemented");
+                                break;
+                        }
+                        if (item !== undefined) {
+                            part.CncExtra.add(item);
+                        }
+
+
+                    });
+                }
+            }
+            console.log(part);
+        }
+    }
+
+    private inflateNotchXNC(data: any) {
+        for (let idx in data.project.operation) {
+            const item = data.project.operation[idx];
+            if (item.typeId !== 'XNC') {
+                continue;
+            }
+            parseString(item.program, {explicitArray: false, mergeAttrs: true}, (err, result) => {
+                const partId = +item.part.id;
+                const part = this.partsList[partId];
+                const program = result.program;
+                if (program.gr === undefined) {
+                    return;
+                }
+                part.isNotch = true;
+                if (!Array.isArray(program.gr)) {
+                    program.gr = [program.gr];
+                }
+
+                for (let idx in program.gr) {
+                    const gr = program.gr[idx];
+                    if (+gr.x1 !== +gr.x2 && +gr.y1 !== +gr.y2) {
+                        console.log("не линейный паз, пропускаем.");
+                        console.log(program.gr);
+                        continue;
+                    }
+
+                    let byLength = false;
+                    let indent = +gr.y1;
+                    if (+gr.x1 === +gr.x2) {
+                        byLength = true;
+                        indent = +gr.x1;
+                    }
+                    part.NotchExtra.push(new NotchItem(
+                        +gr.dp,
+                        indent,
+                        +gr.t,
+                        false,
+                        byLength
+                    ));
+                }
+            });
+
+        }
     }
 
     private inflateDrillXNC(data: any) {
@@ -154,7 +307,7 @@ class GibLabParser {
                     && program.bl == undefined
                     && program.br == undefined
                 ) {
-
+                    return;
                 }
                 part.isDrill = true;
                 const drill = new DrillParsed();
