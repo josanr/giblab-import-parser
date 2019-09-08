@@ -45,8 +45,9 @@ class NotchItem {
     }
 }
 
+export interface PartList { [key: number]: Part; }
 
-class Part {
+export class Part {
     gid: number;
     pos: number;
     modelIndex: number;
@@ -139,16 +140,33 @@ class EndPointArc extends Arc {
 class GibLabParser {
     private basePath: string;
     private goodsSyncList: Map<number, GoodsSync>;
-    private partsList: { [s: number]: Part; } = {};
-
+    private partsList: PartList;
+    private error : Error;
+    private warning: Array<Error>;
     constructor() {
         this.basePath = "/project";
         this.goodsSyncList = new Map();
+        this.partsList = {};
+        this.error = null;
+        this.warning = [];
+    }
+    getSpec() : PartList
+    {
+        return this.partsList;
     }
 
+    getGoodSync() : Map<number, GoodsSync>
+    {
+        return this.goodsSyncList;
+    }
+    getWarnings() : Array<Error>{
+        return this.warning;
+    }
 
-    run(filePath: string, callback: Function) {
+    run(filePath: string, callback: (error: Error, partList: PartList , goodsSync: Map<number, GoodsSync>) => void) {
         let filestring = iconv.decode(fs.readFileSync(filePath), 'win1251');
+        this.goodsSyncList = new Map();
+        this.partsList = {};
         parseString(filestring, {explicitArray: false, mergeAttrs: true}, (err, data) => {
             this.getGoodsInExport(data);
 
@@ -160,9 +178,8 @@ class GibLabParser {
 
             this.inflateCNC(data);
 
-
+            callback(this.error, this.getSpec(), this.getGoodSync())
         });
-
     }
 
     private inflateCNC(data: any) {
@@ -224,10 +241,10 @@ class GibLabParser {
                                 );
                                 break;
                             case "mf":
-                                console.log("rounding - not implemented");
+                                this.warning.push(new Error("rounding - not implemented"));
                                 break;
                             case "ma3p":
-                                console.log("3point arc not implemented");
+                                this.warning.push(new Error("3point arc not implemented"));
                                 break;
                         }
                         if (item !== undefined) {
@@ -238,7 +255,6 @@ class GibLabParser {
                     });
                 }
             }
-            console.log(part);
         }
     }
 
@@ -263,8 +279,7 @@ class GibLabParser {
                 for (let idx in program.gr) {
                     const gr = program.gr[idx];
                     if (+gr.x1 !== +gr.x2 && +gr.y1 !== +gr.y2) {
-                        console.log("не линейный паз, пропускаем.");
-                        console.log(program.gr);
+                        this.warning.push(new Error("не линейный паз, пропускаем."));
                         continue;
                     }
 
@@ -301,11 +316,11 @@ class GibLabParser {
                 for (const idx in result.program.tool) {
                     toolIndex[program.tool[idx].name] = +program.tool[idx].d;
                 }
-                if (program.bf == undefined
-                    && program.bb == undefined
-                    && program.bt == undefined
-                    && program.bl == undefined
-                    && program.br == undefined
+                if (program.bf === undefined
+                    && program.bb === undefined
+                    && program.bt === undefined
+                    && program.bl === undefined
+                    && program.br === undefined
                 ) {
                     return;
                 }
@@ -432,19 +447,19 @@ class GibLabParser {
                 part.pos = +partItem.id;
                 part.num = +partItem.count;
                 part.modelIndex = +partItem.code;
-                if (partItem.elt != undefined) {
+                if (partItem.elt !== undefined) {
                     let opId = partItem.elt.split("#")[1];
                     part.L1 = this.goodsSyncList.get(edgeOps[opId]).modelId;
                 }
-                if (partItem.elb != undefined) {
+                if (partItem.elb !== undefined) {
                     let opId = partItem.elb.split("#")[1];
                     part.L2 = this.goodsSyncList.get(edgeOps[opId]).modelId;
                 }
-                if (partItem.ell != undefined) {
+                if (partItem.ell !== undefined) {
                     let opId = partItem.ell.split("#")[1];
                     part.W1 = this.goodsSyncList.get(edgeOps[opId]).modelId;
                 }
-                if (partItem.elr != undefined) {
+                if (partItem.elr !== undefined) {
                     let opId = partItem.elr.split("#")[1];
                     part.W2 = this.goodsSyncList.get(edgeOps[opId]).modelId;
                 }
