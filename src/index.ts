@@ -1,8 +1,6 @@
 import * as fs from 'fs';
 import * as iconv from 'iconv-lite';
 import {parseString} from 'xml2js';
-import {GoodsSync} from "./GoodsSync";
-import {DrillParsed, DrillPoint} from "./DrillType";
 
 
 const FRONT = 0;
@@ -11,6 +9,82 @@ const TOP = 2;
 const LEFT = 3;
 const BOTTOM = 4;
 const BACK = 5;
+
+export class GoodsSync {
+    private readonly _modelName: string;
+    private readonly _modelId: number;
+
+    private _gid: number;
+
+    constructor(modelId: number, modelName: string) {
+        this._modelId = modelId;
+        this._modelName = modelName;
+        this._gid = 0;
+    }
+
+    get modelId(): number {
+        return this._modelId;
+    }
+
+    get modelName(): string {
+        return this._modelName;
+    }
+
+    get gid(): number {
+        return this._gid;
+    }
+
+    set gid(value: number) {
+        this._gid = value;
+    }
+}
+
+class DrillParsed {
+    totalCount: number = 0;
+    countByDiam: { [key: number]: number } = {};
+    items: Array<DrillPoint> = [];
+
+    public add(point: DrillPoint) {
+        this.totalCount++;
+        if (this.countByDiam[point.diameter] === undefined) {
+            this.countByDiam[point.diameter] = 0;
+        }
+        this.countByDiam[point.diameter]++;
+        this.items.push(point);
+    }
+
+
+}
+
+
+class DrillPoint {
+    type: string = "BV";
+    /**
+     * Тыл - 5
+     * W1 - 3
+     * L2 - 4
+     * W2 - 1
+     * L1 - 2
+     * Лицо - 0
+     */
+
+    side: 0 | 1 | 2 | 3 | 4 | 5 = 0;
+    corner: Array<number> = [];
+    x: number;
+    y: number;
+    z: number;
+    depth: number;
+    diameter: number;
+    repeatType: number = 0;
+    repDX: number = 0;
+    repDy: number = 0;
+    repCount: number = 0;
+    directionX: number = 0;
+    directionY: number = 0;
+    directionZ: number = 0;
+}
+
+
 
 const cncActs: { [s: string]: string } = {
     ms: "actions",
@@ -46,6 +120,7 @@ class NotchItem {
 }
 
 export interface PartList { [key: number]: Part; }
+
 
 export class Part {
     gid: number;
@@ -168,6 +243,24 @@ class GibLabParser {
         this.goodsSyncList = new Map();
         this.partsList = {};
         parseString(filestring, {explicitArray: false, mergeAttrs: true}, (err, data) => {
+            this.getGoodsInExport(data);
+
+            this.inflatePartsList(data);
+
+            this.inflateDrillXNC(data);
+
+            this.inflateNotchXNC(data);
+
+            this.inflateCNC(data);
+
+            callback(this.error, this.getSpec(), this.getGoodSync())
+        });
+    }
+
+    parse(xmlString: string, callback: (error: Error, partList: PartList , goodsSync: Map<number, GoodsSync>) => void) {
+        this.goodsSyncList = new Map();
+        this.partsList = {};
+        parseString(xmlString, {explicitArray: false, mergeAttrs: true}, (err, data) => {
             this.getGoodsInExport(data);
 
             this.inflatePartsList(data);

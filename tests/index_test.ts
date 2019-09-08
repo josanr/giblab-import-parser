@@ -1,9 +1,8 @@
-import {GibLabParser, Part, PartList} from "../src/index"
+import {GibLabParser, GoodsSync, PartList} from "../src/index"
 import { expect } from 'chai';
 import 'mocha';
 import * as fs from "fs";
 
-import {GoodsSync} from "../src/GoodsSync";
 
 describe('parse file', () => {
 
