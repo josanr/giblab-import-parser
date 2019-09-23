@@ -416,7 +416,7 @@ class GibLabParser {
                 if (program.gr === undefined) {
                     return;
                 }
-                part.isNotch = true;
+
                 if (!Array.isArray(program.gr)) {
                     program.gr = [program.gr];
                 }
@@ -434,6 +434,7 @@ class GibLabParser {
                         byLength = true;
                         indent = +gr.x1;
                     }
+                    part.isNotch = true;
                     part.NotchExtra.push(new NotchItem(
                         +gr.dp,
                         indent,
