@@ -233,29 +233,16 @@ class GibLabParser {
         return this.warning;
     }
 
-    run(filePath: string, callback: (error: Error, partList: PartList , goodsSync: Map<number, GoodsSync>) => void) {
-        let filestring = iconv.decode(fs.readFileSync(filePath), 'win1251');
+    run(filePath: string, callback: (error: Error, partList: PartList, goodsSync: Map<number, GoodsSync>) => void) {
+        let filestring = fs.readFileSync(filePath);
+        this.parse(filestring, callback);
+    }
+
+    parse(xmlString: Buffer, callback: (error: Error, partList: PartList, goodsSync: Map<number, GoodsSync>) => void) {
+        const filestring = iconv.decode(xmlString, 'win1251');
         this.goodsSyncList = new Map();
         this.partsList = {};
         parseString(filestring, {explicitArray: false, mergeAttrs: true}, (err, data) => {
-            this.getGoodsInExport(data);
-
-            this.inflatePartsList(data);
-
-            this.inflateDrillXNC(data);
-
-            this.inflateNotchXNC(data);
-
-            this.inflateCNC(data);
-
-            callback(this.error, this.getSpec(), this.getGoodSync())
-        });
-    }
-
-    parse(xmlString: string, callback: (error: Error, partList: PartList , goodsSync: Map<number, GoodsSync>) => void) {
-        this.goodsSyncList = new Map();
-        this.partsList = {};
-        parseString(xmlString, {explicitArray: false, mergeAttrs: true}, (err, data) => {
             this.getGoodsInExport(data);
 
             this.inflatePartsList(data);
