@@ -85,7 +85,6 @@ class DrillPoint {
 }
 
 
-
 const cncActs: { [s: string]: string } = {
     ms: "actions",
     ma: "actions",
@@ -119,7 +118,9 @@ class NotchItem {
     }
 }
 
-export interface PartList { [key: number]: Part; }
+export interface PartList {
+    [key: number]: Part;
+}
 
 
 export class Part {
@@ -209,8 +210,9 @@ class GibLabParser {
     private basePath: string;
     private goodsSyncList: Map<number, GoodsSync>;
     private partsList: PartList;
-    private error : Error;
+    private error: Error;
     private warning: Array<Error>;
+
     constructor() {
         this.basePath = "/project";
         this.goodsSyncList = new Map();
@@ -218,16 +220,16 @@ class GibLabParser {
         this.error = null;
         this.warning = [];
     }
-    getSpec() : PartList
-    {
+
+    getSpec(): PartList {
         return this.partsList;
     }
 
-    getGoodSync() : Map<number, GoodsSync>
-    {
+    getGoodSync(): Map<number, GoodsSync> {
         return this.goodsSyncList;
     }
-    getWarnings() : Array<Error>{
+
+    getWarnings(): Array<Error> {
         return this.warning;
     }
 
