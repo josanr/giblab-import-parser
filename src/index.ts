@@ -140,20 +140,8 @@ export class Part {
     isGlue: boolean = false;
     isCNC: boolean = false;
     DrillExtra: DrillParsed;
-    CncExtra: CncExtra = new CncExtra();
+    CncExtra:  Array<CncItem> = [];
     NotchExtra: Array<NotchItem> = [];
-}
-
-class CncExtra {
-    items: Array<CncItem> = [];
-
-    getPath(): string {
-        return "hello";
-    }
-
-    add(item: CncItem) {
-        this.items.push(item)
-    }
 }
 
 class CncItem {
@@ -161,13 +149,14 @@ class CncItem {
     y: number;
     pathCenter: number;
     depth: number;
-
+    type: string;
 
     constructor(x: number, y: number, pathCenter: number, depth: number) {
         this.x = x;
         this.y = y;
         this.pathCenter = pathCenter;
         this.depth = depth;
+        this.type = "none";
     }
 }
 
@@ -180,6 +169,7 @@ class StartPoint extends CncItem {
         super(x, y, pathCenter, depth);
         this.inType = inType;
         this.outType = outType;
+        this.type = "StartPoint";
     }
 }
 
@@ -191,6 +181,7 @@ class Arc extends CncItem {
         super(x, y, pathCenter, depth);
         this.radius = radius;
         this.direction = direction;
+        this.type = "Arc";
     }
 }
 
@@ -198,6 +189,7 @@ class Line extends CncItem {
 
     constructor(x: number, y: number, pathCenter: number, depth: number) {
         super(x, y, pathCenter, depth);
+        this.type = "Line";
     }
 }
 
@@ -209,6 +201,7 @@ class EndPointArc extends Arc {
         super(x, y, pathCenter, depth, 0, direction);
         this.centerX = centerX;
         this.centerY = centerY;
+        this.type = "EndPointArc";
     }
 }
 
@@ -277,60 +270,119 @@ class GibLabParser {
 
     private inflateCNC(data: any) {
         for (let idx in data.project.operation) {
-            const item = data.project.operation[idx];
-            if (item.typeId !== 'XNC') {
+            const operation = data.project.operation[idx];
+            if (operation.typeId !== 'XNC') {
                 continue;
             }
-            const partId = +item.part.id;
+            const partId = +operation.part.id;
             const part = this.partsList[partId];
+            const lines = operation.program.split("><");
+            let dx: number;
+            let dy: number;
+            let dz: number;
 
-            const lines = item.program.split("><");
+            for (const lid in lines) {
+                const line = lines[lid];
+                const lineParts = line.split(" ");
+                if (lineParts[0] !== undefined && lineParts[0] === 'program') {
+                    for (const lp in lineParts) {
+                        const linePart = lineParts[lp];
+                        if (linePart.split("=")[0].trim() === 'dx') {
+                            dx = linePart.split("=")[1].split('"')[1].trim();
+                        }
+
+                        if (linePart.split("=")[0].trim() === 'dy') {
+                            dy = linePart.split("=")[1].split('"')[1].trim();
+                        }
+                        if (linePart.split("=")[0].trim() === 'dz') {
+                            dz = linePart.split("=")[1].split('"')[1].trim();
+                        }
+                    }
+                }
+            }
+
+            const variables: { [key: string]: number } = {};
+            for (const lid in lines) {
+                const line = lines[lid];
+                const lineParts = line.split(" ");
+                if (lineParts[0] !== undefined && lineParts[0] === 'var') {
+
+                    let key = null;
+                    let value = null;
+                    for (const lp in lineParts) {
+                        const linePart = lineParts[lp];
+                        if (linePart.split("=")[0].trim() === 'name') {
+                            key = linePart.split("=")[1].split('"')[1].trim();
+                        }
+
+                        if (linePart.split("=")[0].trim() === 'expr') {
+                            eval("value=+" + linePart.split("=")[1].split('"')[1].trim());
+
+                        }
+                    }
+                    if (key !== null && value !== null) {
+                        variables[key] = value;
+                    }
+                }
+            }
+
+            let pathCenter: number;
+            let depth: number;
+
             for (const lid in lines) {
                 const line = lines[lid];
 
                 if (cncActs[line.split(" ")[0]] !== undefined) {
                     part.isCNC = true;
+
                     parseString("<" + line + ">", {explicitArray: false, mergeAttrs: true}, (err, result) => {
                         const itemType = Object.keys(result)[0];
                         let item: CncItem;
+
                         switch (itemType) {
                             case "ms":
+                                pathCenter = variables[result["ms"].c] === undefined ? +result["ms"].c : variables[result["ms"].c];
+                                depth = variables[result["ms"].dp] === undefined ? +result["ms"].dp : variables[result["ms"].dp];
+
                                 item = new StartPoint(
-                                    +result["ms"].x,
-                                    +result["ms"].y,
-                                    +result["ms"].c,
-                                    +result["ms"].dp,
-                                    +result["ms"].in,
-                                    +result["ms"].out,
+                                    variables[result["ms"].x] === undefined ? +result["ms"].x : variables[result["ms"].x],
+                                    variables[result["ms"].y] === undefined ? +result["ms"].y : variables[result["ms"].y],
+                                    pathCenter,
+                                    depth,
+                                    0,
+                                    0,
                                 );
+
                                 break;
                             case "ma":
                                 item = new Arc(
-                                    +result["ma"].x,
-                                    +result["ma"].y,
-                                    +result["ma"].c,
-                                    +result["ma"].dp,
-                                    +result["ma"].r,
+                                    variables[result["ma"].x] === undefined ? +result["ma"].x : variables[result["ma"].x],
+                                    variables[result["ma"].y] === undefined ? +result["ma"].y : variables[result["ma"].y],
+                                    pathCenter,
+                                    depth,
+                                    variables[result["ma"].r] === undefined ? +result["ma"].r : variables[result["ma"].r],
                                     result["ma"].dir,
                                 );
+
                                 break;
                             case "ml":
                                 item = new Line(
-                                    +result["ml"].x,
-                                    +result["ml"].y,
-                                    +result["ml"].c,
-                                    +result["ml"].dp
+                                    variables[result["ml"].x] === undefined ? +result["ml"].x : variables[result["ml"].x],
+                                    variables[result["ml"].y] === undefined ? +result["ml"].y : variables[result["ml"].y],
+                                    pathCenter,
+                                    depth,
                                 );
+
                                 break;
                             case "mac":
                                 item = new EndPointArc(
-                                    +result["mac"].x,
-                                    +result["mac"].y,
-                                    +result["mac"].c,
-                                    +result["mac"].dp,
+                                    variables[result["mac"].x] === undefined ? +result["mac"].x : variables[result["mac"].x],
+                                    variables[result["mac"].y] === undefined ? +result["mac"].y : variables[result["mac"].y],
+                                    pathCenter,
+                                    depth,
                                     result["mac"].dir,
-                                    +result["mac"].cx,
-                                    +result["mac"].cy
+                                    variables[result["mac"].cx] === undefined ? +result["mac"].cx : variables[result["mac"].cx],
+                                    variables[result["mac"].cy] === undefined ? +result["mac"].cy : variables[result["mac"].cy]
                                 );
                                 break;
                             case "mf":
@@ -341,7 +393,7 @@ class GibLabParser {
                                 break;
                         }
                         if (item !== undefined) {
-                            part.CncExtra.add(item);
+                            part.CncExtra.push(item);
                         }
 
 
