@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<project importBMV="1.78">
+    <good typeId="product" id="1" count="1" name="05-Test" code="">
+        <part id="1" name="№ R150 Polita" dl="300.00" dw="320.00" count="1" txt="true" code="" part.code=""
+              elb="@operation#5" elr="@operation#5"/>
+        <part id="2" name="№1 Skleika Krishka" dl="800.00" dw="450.00" count="1" txt="true" code="1" part.code="1"
+              elb="@operation#3" ell="@operation#3" elr="@operation#3"/>
+        <part id="3" name="№2 CPU boc" dl="600.00" dw="450.00" count="1" txt="true" code="2" part.code="2"
+              elt="@operation#1"/>
+        <part id="4" name="№3 Boc" dl="600.00" dw="430.00" count="1" txt="true" code="3" part.code="3"
+              elb="@operation#1" ell="@operation#2"/>
+        <part id="5" name="№4 Ugol polita" dl="764.00" dw="446.00" count="1" txt="true" code="4" part.code="4"
+              elb="@operation#4" elr="@operation#4"/>
+        <part id="6" name="№5 Upil Planka" dl="764.00" dw="40.00" count="1" txt="true" code="5" part.code="5"
+              elb="@operation#1"/>
+    </good>
+    <good typeId="tool.cutting" id="2"/>
+    <good typeId="sheet" id="3" t="18.00" name="ДСП 101K SM_18мм Белый гладкий KU">
+        <part id="7" count="10000" l="2750" w="1830"/>
+    </good>
+    <operation typeId="CS" id="6" tool1="2" cSizeMode="1">
+        <material id="3"/>
+        <part id="2"/>
+        <part id="3"/>
+        <part id="4"/>
+        <part id="5"/>
+        <part id="6"/>
+    </operation>
+    <good typeId="tool.cutting" id="4"/>
+    <good typeId="sheet" id="5" t="18.00" name="ДСП H3331 ST10_18мм Дуб Небраска Натур EG">
+        <part id="8" count="10000" l="2750" w="1830"/>
+    </good>
+    <operation typeId="CS" id="7" tool1="4" cSizeMode="1">
+        <material id="5"/>
+        <part id="1"/>
+    </operation>
+    <good typeId="tool.edgeline" id="6"/>
+    <good typeId="band" id="7" t="2.00" w="22.00" name="Кромка ABS 22&#x2F;2.0"/>
+    <operation typeId="EL" id="1" tool1="6">
+        <material id="7"/>
+        <part id="4"/>
+        <part id="3"/>
+        <part id="6"/>
+    </operation>
+    <good typeId="tool.edgeline" id="8"/>
+    <good typeId="band" id="9" t="0.50" w="22.00" name="Кромка ABS 22&#x2F;0.5"/>
+    <operation typeId="EL" id="2" tool1="8">
+        <material id="9"/>
+        <part id="4"/>
+    </operation>
+    <good typeId="tool.edgeline" id="10"/>
+    <good typeId="band" id="11" t="2.00" w="45.00" name="Кромка ABS 44&#x2F;2.0"/>
+    <operation typeId="EL" id="3" tool1="10">
+        <material id="11"/>
+        <part id="2"/>
+    </operation>
+    <good typeId="tool.edgeline" id="12"/>
+    <good typeId="band" id="13" t="0.50" w="22.00" name="!СмЧт Кромка ABS 22&#x2F;0.5"/>
+    <operation typeId="EL" id="4" tool1="12">
+        <material id="13"/>
+        <part id="5"/>
+    </operation>
+    <good typeId="tool.edgeline" id="14"/>
+    <good typeId="band" id="15" t="2.00" w="22.00" name="!СмЧт Кромка ABS 22&#x2F;2.0"/>
+    <operation typeId="EL" id="5" tool1="14">
+        <material id="15"/>
+        <part id="1"/>
+    </operation>
+    <operation typeId="XNC" id="8" side="1" bySizeDetail="true" code="0000x001x0" typeName="№ R150 Polita"
+               program="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;program dx=&quot;300.00&quot; dy=&quot;320.00&quot; dz=&quot;18.00&quot;&gt;null&lt;tool name=&quot;Mill20&quot; d=&quot;20&quot;&#x2F;&gt;&lt;var comment=&quot;Глубина сквозного фрезерования контура&quot; name=&quot;contMillDepth&quot; type=&quot;double&quot; expr=&quot;dz&quot;&#x2F;&gt;&lt;ms x=&quot;-30&quot; y=&quot;320&quot; dp=&quot;contMillDepth&quot; name=&quot;Mill20&quot; c=&quot;1&quot;&#x2F;&gt;&lt;ml x=&quot;150&quot; y=&quot;320&quot;&#x2F;&gt;&lt;mac x=&quot;300&quot; y=&quot;170&quot; cx=&quot;150&quot; cy=&quot;170&quot; dir=&quot;false&quot;&#x2F;&gt;&lt;ml x=&quot;300&quot; y=&quot;-30&quot;&#x2F;&gt;&lt;&#x2F;program&gt;">
+        <part id="1"/>
+    </operation>
+    <operation typeId="XNC" id="9" side="1" bySizeDetail="true" code="0001x002x1" typeName="№1 Skleika Krishka"
+               program="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;program dx=&quot;800.00&quot; dy=&quot;450.00&quot; dz=&quot;18.00&quot;&gt;&lt;tool name=&quot;Bore8&quot; d=&quot;8&quot;&#x2F;&gt;&lt;bf x=&quot;9&quot; y=&quot;50&quot; dp=&quot;14&quot; name=&quot;Bore8&quot;&#x2F;&gt;&lt;bf x=&quot;9&quot; y=&quot;400&quot; dp=&quot;14&quot; name=&quot;Bore8&quot;&#x2F;&gt;&lt;bf x=&quot;791&quot; y=&quot;50&quot; dp=&quot;14&quot; name=&quot;Bore8&quot;&#x2F;&gt;&lt;bf x=&quot;791&quot; y=&quot;400&quot; dp=&quot;14&quot; name=&quot;Bore8&quot;&#x2F;&gt;&lt;tool name=&quot;Cut4&quot; d=&quot;4&quot;&#x2F;&gt;&lt;gr x1=&quot;0&quot; y1=&quot;2&quot; x2=&quot;800&quot; y2=&quot;2&quot; dp=&quot;9&quot; name=&quot;Cut4&quot; c=&quot;0&quot; t=&quot;4&quot; comment=&quot;четверть двп (9&#x2F;4)&quot;&#x2F;&gt;&lt;gr x1=&quot;800&quot; y1=&quot;391&quot; x2=&quot;0&quot; y2=&quot;391&quot; dp=&quot;7&quot; name=&quot;Cut4&quot; c=&quot;0&quot; t=&quot;18&quot; comment=&quot;LED *&#x2F;7&#x2F;18 (LED*&#x2F;7&#x2F;18)&quot;&#x2F;&gt;&lt;&#x2F;program&gt;">
+        <part id="2"/>
+    </operation>
+    <operation typeId="XNC" id="10" side="1" bySizeDetail="true" code="0002x003x1" typeName="№2 CPU boc"
+               program="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;program dx=&quot;600.00&quot; dy=&quot;450.00&quot; dz=&quot;18.00&quot;&gt;&lt;tool name=&quot;Bore15&quot; d=&quot;15&quot;&#x2F;&gt;&lt;tool name=&quot;Bore7&quot; d=&quot;7&quot;&#x2F;&gt;&lt;tool name=&quot;Bore8&quot; d=&quot;8&quot;&#x2F;&gt;&lt;var comment=&quot;Глубина сквозного отверстия&quot; name=&quot;throughBoreDepth&quot; type=&quot;double&quot; expr=&quot;dz+2.00&quot;&#x2F;&gt;&lt;br ver=&quot;2&quot; y=&quot;50&quot; z=&quot;9&quot; dp=&quot;30.00&quot; m=&quot;true&quot; name=&quot;Bore8&quot;&#x2F;&gt;&lt;br ver=&quot;2&quot; y=&quot;400&quot; z=&quot;9&quot; dp=&quot;30.00&quot; m=&quot;true&quot; name=&quot;Bore8&quot;&#x2F;&gt;&lt;bf x=&quot;309&quot; y=&quot;70&quot; dp=&quot;throughBoreDepth&quot; name=&quot;Bore7&quot;&#x2F;&gt;&lt;bf x=&quot;309&quot; y=&quot;376&quot; dp=&quot;throughBoreDepth&quot; name=&quot;Bore7&quot;&#x2F;&gt;&lt;bf x=&quot;566&quot; y=&quot;50&quot; dp=&quot;14&quot; name=&quot;Bore15&quot;&#x2F;&gt;&lt;bf x=&quot;566&quot; y=&quot;400&quot; dp=&quot;14&quot; name=&quot;Bore15&quot;&#x2F;&gt;&lt;tool name=&quot;Cut4&quot; d=&quot;4&quot;&#x2F;&gt;&lt;gr x1=&quot;600&quot; y1=&quot;432&quot; x2=&quot;0&quot; y2=&quot;432&quot; dp=&quot;9&quot; name=&quot;Cut4&quot; c=&quot;0&quot; t=&quot;4&quot; comment=&quot;паз двп (16&#x2F;9&#x2F;4)&quot;&#x2F;&gt;null&lt;tool name=&quot;Mill20&quot; d=&quot;20&quot;&#x2F;&gt;&lt;var comment=&quot;Глубина сквозного фрезерования контура&quot; name=&quot;contMillDepth&quot; type=&quot;double&quot; expr=&quot;dz&quot;&#x2F;&gt;&lt;ms x=&quot;87.1457&quot; y=&quot;480&quot; dp=&quot;contMillDepth&quot; name=&quot;Mill20&quot; c=&quot;2&quot;&#x2F;&gt;&lt;mac x=&quot;-30&quot; y=&quot;363.0475&quot; cx=&quot;-3.4806&quot; cy=&quot;453.6302&quot; dir=&quot;false&quot;&#x2F;&gt;&lt;&#x2F;program&gt;">
+        <part id="3"/>
+    </operation>
+    <operation typeId="XNC" id="11" side="1" bySizeDetail="true" code="0003x004x1" typeName="№3 Boc"
+               program="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;program dx=&quot;600.00&quot; dy=&quot;430.00&quot; dz=&quot;18.00&quot;&gt;&lt;tool name=&quot;Bore15&quot; d=&quot;15&quot;&#x2F;&gt;&lt;tool name=&quot;Bore7&quot; d=&quot;7&quot;&#x2F;&gt;&lt;tool name=&quot;Bore8&quot; d=&quot;8&quot;&#x2F;&gt;&lt;var comment=&quot;Глубина сквозного отверстия&quot; name=&quot;throughBoreDepth&quot; type=&quot;double&quot; expr=&quot;dz+2.00&quot;&#x2F;&gt;&lt;br ver=&quot;2&quot; y=&quot;50&quot; z=&quot;9&quot; dp=&quot;30.00&quot; m=&quot;true&quot; name=&quot;Bore8&quot;&#x2F;&gt;&lt;br ver=&quot;2&quot; y=&quot;400&quot; z=&quot;9&quot; dp=&quot;30.00&quot; m=&quot;true&quot; name=&quot;Bore8&quot;&#x2F;&gt;&lt;bf x=&quot;309&quot; y=&quot;74&quot; dp=&quot;throughBoreDepth&quot; name=&quot;Bore7&quot;&#x2F;&gt;&lt;bf x=&quot;309&quot; y=&quot;157&quot; dp=&quot;throughBoreDepth&quot; name=&quot;Bore7&quot;&#x2F;&gt;&lt;bf x=&quot;566&quot; y=&quot;50&quot; dp=&quot;14&quot; name=&quot;Bore15&quot;&#x2F;&gt;&lt;bf x=&quot;566&quot; y=&quot;400&quot; dp=&quot;14&quot; name=&quot;Bore15&quot;&#x2F;&gt;&lt;tool name=&quot;Cut4&quot; d=&quot;4&quot;&#x2F;&gt;&lt;gr x1=&quot;600&quot; y1=&quot;18&quot; x2=&quot;0&quot; y2=&quot;18&quot; dp=&quot;9&quot; name=&quot;Cut4&quot; c=&quot;0&quot; t=&quot;4&quot; comment=&quot;паз двп (16&#x2F;9&#x2F;4)&quot;&#x2F;&gt;&lt;&#x2F;program&gt;">
+        <part id="4"/>
+    </operation>
+    <operation typeId="XNC" id="12" side="1" bySizeDetail="true" code="0004x005x1" typeName="№4 Ugol polita"
+               program="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;program dx=&quot;764.00&quot; dy=&quot;446.00&quot; dz=&quot;18.00&quot;&gt;&lt;tool name=&quot;Bore5&quot; d=&quot;5&quot;&#x2F;&gt;&lt;bl ver=&quot;2&quot; y=&quot;70&quot; z=&quot;9&quot; dp=&quot;36.00&quot; m=&quot;true&quot; name=&quot;Bore5&quot;&#x2F;&gt;&lt;bl ver=&quot;2&quot; y=&quot;376&quot; z=&quot;9&quot; dp=&quot;36.00&quot; m=&quot;true&quot; name=&quot;Bore5&quot;&#x2F;&gt;&lt;br ver=&quot;2&quot; y=&quot;70&quot; z=&quot;9&quot; dp=&quot;36.00&quot; m=&quot;true&quot; name=&quot;Bore5&quot;&#x2F;&gt;&lt;br ver=&quot;2&quot; y=&quot;153&quot; z=&quot;9&quot; dp=&quot;36.00&quot; m=&quot;true&quot; name=&quot;Bore5&quot;&#x2F;&gt;null&lt;tool name=&quot;Mill20&quot; d=&quot;20&quot;&#x2F;&gt;&lt;var comment=&quot;Глубина сквозного фрезерования контура&quot; name=&quot;contMillDepth&quot; type=&quot;double&quot; expr=&quot;dz&quot;&#x2F;&gt;&lt;ms x=&quot;-28.7983&quot; y=&quot;454.4058&quot; dp=&quot;contMillDepth&quot; name=&quot;Mill20&quot; c=&quot;1&quot;&#x2F;&gt;&lt;ml x=&quot;792.7983&quot; y=&quot;214.5942&quot;&#x2F;&gt;&lt;&#x2F;program&gt;">
+        <part id="5"/>
+    </operation>
+</project>

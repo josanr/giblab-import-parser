@@ -76,4 +76,16 @@ describe('parse file', () => {
 
 
     });
+
+
+    it('One element on map must not give error', () => {
+        let parser = new GibLabParser();
+        let filePath = "./tests/test03.project";
+        parser.run(filePath, (error: Error, result: PartList , goodsSync: Map<number, GoodsSync>) => {
+
+            expect(error).to.equal(null);
+        });
+
+
+    });
 });

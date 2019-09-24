@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as iconv from 'iconv-lite';
 import {parseString} from 'xml2js';
+import {isArray} from "util";
 
 
 const FRONT = 0;
@@ -610,8 +611,13 @@ class GibLabParser {
             }
 
             let gid = this.goodsSyncList.get(+item.material.id).modelId;
-            for (let pid in item.part) {
-                let partid = item.part[pid].id;
+            let parts = item.part;
+            if(!isArray(parts)){
+                parts = [parts];
+            }
+
+            for (let pid in parts) {
+                let partid = parts[pid].id;
                 this.partsList[partid].gid = +gid;
             }
         }
