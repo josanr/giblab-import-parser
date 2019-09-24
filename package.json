@@ -21,8 +21,7 @@
     "eslint-plugin-react": "^7.12.4",
     "mocha": "^6.1.4",
     "ts-node": "^8.1.0",
-    "typescript": "^3.4.4",
-    "iconv-lite": "^0.4.24"
+    "typescript": "^3.4.4"
   },
   "scripts": {
     "test": "mocha -r ts-node/register tests/**/*.ts"
