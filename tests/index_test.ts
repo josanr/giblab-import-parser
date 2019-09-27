@@ -88,4 +88,22 @@ describe('parse file', () => {
 
 
     });
+
+
+    it('Notch must be on right side', () => {
+        let parser = new GibLabParser();
+        let filePath = "./tests/test01.project";
+        parser.run(filePath, (error: Error, result: PartList , goodsSync: Map<number, GoodsSync>) => {
+
+            for(let idx in result){
+                if(result[idx].isNotch === true && result[idx].pos === 4){
+                    for(let nid in result[idx].NotchExtra){
+                        expect(result[idx].NotchExtra[nid].getByLength()).to.equal(true);
+                    }
+                }
+            }
+        });
+
+
+    });
 });

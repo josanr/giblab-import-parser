@@ -117,6 +117,11 @@ class NotchItem {
         this.face = face;
         this.byLength = byLength;
     }
+
+
+    getByLength(): boolean {
+        return this.byLength;
+    }
 }
 
 export interface PartList {
@@ -418,10 +423,10 @@ class GibLabParser {
                         continue;
                     }
 
-                    let byLength = false;
+                    let byLength = true;
                     let indent = +gr.y1;
                     if (+gr.x1 === +gr.x2) {
-                        byLength = true;
+                        byLength = false;
                         indent = +gr.x1;
                     }
                     part.isNotch = true;
