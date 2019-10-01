@@ -106,4 +106,21 @@ describe('parse file', () => {
 
 
     });
+
+
+    it('Notch is centered by tool in export it must be moved by left side', () => {
+        let parser = new GibLabParser();
+        let filePath = "./tests/test01.project";
+        parser.run(filePath, (error: Error, result: PartList , goodsSync: Map<number, GoodsSync>) => {
+
+            for(let idx in result){
+                if(result[idx].isNotch === true && result[idx].pos === 4){
+                    expect(result[idx].NotchExtra[0].getIndent()).to.equal(11);
+                    expect(result[idx].NotchExtra[1].getIndent()).to.equal(128);
+                }
+            }
+        });
+
+
+    });
 });

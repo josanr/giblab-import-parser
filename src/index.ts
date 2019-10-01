@@ -122,6 +122,10 @@ class NotchItem {
     getByLength(): boolean {
         return this.byLength;
     }
+
+    getIndent(): number {
+        return this.indent;
+    }
 }
 
 export interface PartList {
@@ -432,7 +436,7 @@ class GibLabParser {
                     part.isNotch = true;
                     part.NotchExtra.push(new NotchItem(
                         +gr.dp,
-                        indent,
+                        indent - (+gr.t / 2),
                         +gr.t,
                         false,
                         byLength
