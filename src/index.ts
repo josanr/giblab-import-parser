@@ -428,10 +428,10 @@ class GibLabParser {
                     }
 
                     let byLength = true;
-                    let indent = +gr.y1;
-                    if (+gr.x1 === +gr.x2) {
+                    let indent = Math.round(+gr.y1);
+                    if (Math.round(+gr.x1) === Math.round(+gr.x2)) {
                         byLength = false;
-                        indent = +gr.x1;
+                        indent = Math.round(+gr.x1);
                     }
                     part.isNotch = true;
                     part.NotchExtra.push(new NotchItem(
