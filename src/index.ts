@@ -485,10 +485,32 @@ class GibLabParser {
                 const partId = +item.part.id;
                 const part = this.partsList[partId];
                 const program = result.program;
+                let dx = +program.dx;
+                let dy = +program.dy;
+                let dz = +program.dz;
+
                 let toolIndex: { [s: string]: number } = {};
-                for (const idx in result.program.tool) {
-                    toolIndex[program.tool[idx].name] = +program.tool[idx].d;
+                let tools = result.program.tool;
+                if (!Array.isArray(tools)) {
+                    tools = [tools];
                 }
+
+                for (const idx in tools) {
+                    toolIndex[tools[idx].name] = +tools[idx].d;
+                }
+                const variables: { [key: string]: number } = {};
+
+                let varlist = result.program.var;
+                if (varlist !== undefined) {
+                    if (!Array.isArray(varlist)) {
+                        varlist = [varlist];
+                    }
+                    for (const idx in varlist) {
+                        const variable = varlist[idx];
+                        variables[variable.name] = eval(variable.expr);
+                    }
+                }
+
                 if (program.bf === undefined
                     && program.bb === undefined
                     && program.bt === undefined
@@ -502,9 +524,13 @@ class GibLabParser {
 
                 //drill face
                 if (program.bf !== undefined) {
-                    for (let idx in program.bf) {
+                    let bore = program.bf;
+                    if(!Array.isArray(bore)){
+                        bore = [bore];
+                    }
+                    for (let idx in bore) {
 
-                        const drillData = program.bf[idx];
+                        const drillData = bore[idx];
                         const point = new DrillPoint();
                         point.side = FRONT;
                         point.x = +drillData.x;
@@ -520,8 +546,13 @@ class GibLabParser {
 
                 //drill left
                 if (program.bl !== undefined) {
-                    for (let idx in program.bl) {
-                        const drillData = program.bl[idx];
+                    let bore = program.bl;
+                    if(!Array.isArray(bore)){
+                        bore = [bore];
+                    }
+                    for (let idx in bore) {
+
+                        const drillData = bore[idx];
                         const point = new DrillPoint();
                         point.type = "BH";
                         point.side = LEFT;
@@ -538,8 +569,13 @@ class GibLabParser {
 
                 //drill right
                 if (program.br !== undefined) {
-                    for (let idx in program.br) {
-                        const drillData = program.br[idx];
+                    let bore = program.br;
+                    if(!Array.isArray(bore)){
+                        bore = [bore];
+                    }
+                    for (let idx in bore) {
+
+                        const drillData = bore[idx];
                         const point = new DrillPoint();
                         point.type = "BH";
                         point.side = RIGHT;
@@ -556,8 +592,13 @@ class GibLabParser {
 
                 //drill top
                 if (program.bt !== undefined) {
-                    for (let idx in program.bt) {
-                        const drillData = program.bt[idx];
+                    let bore = program.bt;
+                    if(!Array.isArray(bore)){
+                        bore = [bore];
+                    }
+                    for (let idx in bore) {
+
+                        const drillData = bore[idx];
                         const point = new DrillPoint();
                         point.type = "BH";
                         point.side = TOP;
@@ -574,8 +615,13 @@ class GibLabParser {
 
                 //drill top
                 if (program.bb !== undefined) {
-                    for (let idx in program.bb) {
-                        const drillData = program.bb[idx];
+                    let bore = program.bb;
+                    if(!Array.isArray(bore)){
+                        bore = [bore];
+                    }
+                    for (let idx in bore) {
+
+                        const drillData = bore[idx];
                         const point = new DrillPoint();
                         point.type = "BH";
                         point.side = BOTTOM;
