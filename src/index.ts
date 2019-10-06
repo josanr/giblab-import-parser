@@ -621,7 +621,7 @@ class GibLabParser {
 
             let gid = this.goodsSyncList.get(+item.material.id).modelId;
             let parts = item.part;
-            if(!isArray(parts)){
+            if(!Array.isArray(parts)){
                 parts = [parts];
             }
 
