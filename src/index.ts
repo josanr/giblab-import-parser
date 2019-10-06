@@ -558,7 +558,7 @@ class GibLabParser {
                         point.x = 0;
                         point.y = +drillData.y;
                         point.z = +drillData.z;
-                        point.depth = variables[drillData.dp] === undefined ? +drillData.dp : variables[drillData.dp];;
+                        point.depth = variables[drillData.dp] === undefined ? +drillData.dp : variables[drillData.dp];
                         point.diameter = toolIndex[drillData.name];
                         point.corner.push(2);
                         part.DrillExtra.add(point);
@@ -581,7 +581,7 @@ class GibLabParser {
                         point.x = +program.dx;
                         point.y = +drillData.y;
                         point.z = +drillData.z;
-                        point.depth = variables[drillData.dp] === undefined ? +drillData.dp : variables[drillData.dp];;
+                        point.depth = variables[drillData.dp] === undefined ? +drillData.dp : variables[drillData.dp];
                         point.diameter = toolIndex[drillData.name];
                         point.corner.push(4);
                         part.DrillExtra.add(point);
@@ -604,7 +604,7 @@ class GibLabParser {
                         point.x = +drillData.x;
                         point.y = 0;
                         point.z = +drillData.z;
-                        point.depth = variables[drillData.dp] === undefined ? +drillData.dp : variables[drillData.dp];;
+                        point.depth = variables[drillData.dp] === undefined ? +drillData.dp : variables[drillData.dp];
                         point.diameter = toolIndex[drillData.name];
                         point.corner.push(3);
                         part.DrillExtra.add(point);
@@ -627,7 +627,7 @@ class GibLabParser {
                         point.x = +drillData.x;
                         point.y = +program.dy;
                         point.z = +drillData.z;
-                        point.depth = variables[drillData.dp] === undefined ? +drillData.dp : variables[drillData.dp];;
+                        point.depth = variables[drillData.dp] === undefined ? +drillData.dp : variables[drillData.dp];
                         point.diameter = toolIndex[drillData.name];
                         point.corner.push(1);
                         part.DrillExtra.add(point);
