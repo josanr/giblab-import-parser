@@ -463,7 +463,7 @@ class GibLabParser {
                         +gr.dp,
                         indent - (+gr.t / 2),
                         +gr.t,
-                        false,
+                        +item.side == 1,
                         byLength
                     ));
                 }
