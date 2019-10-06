@@ -280,4 +280,14 @@ describe('parse file', () => {
             }
         });
     });
+
+
+    it('Single item Import', () => {
+        let parser = new GibLabParser();
+        let filePath = "./tests/test05.project";
+        parser.run(filePath, (error: Error, result: PartList , goodsSync: Map<number, GoodsSync>) => {
+
+            expect(Object.keys(result).length).to.equal(1);
+        });
+    });
 });

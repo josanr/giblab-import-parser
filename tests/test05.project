@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<project importBMV="1.78">
+	<good typeId="product" id="1" count="1" name="Модель2" code="">
+		<part id="1" name="№ Фронтальная" dl="300.00" dw="150.00" count="1" txt="true" code="" part.code=""/>
+	</good>
+	<good typeId="tool.cutting" id="2"/>
+	<good typeId="sheet" id="3" t="18.00" name="W1000 st30">
+		<part id="2" count="10000" l="2750" w="1830"/>
+	</good>
+	<operation typeId="CS" id="1" tool1="2" cSizeMode="1">
+		<material id="3"/>
+		<part id="1" />
+	</operation>
+	<operation typeId="XNC" id="2" side="1" bySizeDetail="true" code="0000x001x1" typeName="№ Фронтальная" program="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;program dx=&quot;300.00&quot; dy=&quot;150.00&quot; dz=&quot;18.00&quot;&gt;&lt;tool name=&quot;Bore10&quot; d=&quot;10&quot;&#x2F;&gt;&lt;tool name=&quot;Bore3&quot; d=&quot;3&quot;&#x2F;&gt;&lt;tool name=&quot;Bore14&quot; d=&quot;14&quot;&#x2F;&gt;&lt;tool name=&quot;Bore2&quot; d=&quot;2&quot;&#x2F;&gt;&lt;tool name=&quot;Bore8&quot; d=&quot;8&quot;&#x2F;&gt;&lt;br ver=&quot;2&quot; y=&quot;43.7&quot; z=&quot;10.59&quot; dp=&quot;12.00&quot; m=&quot;false&quot; name=&quot;Bore8&quot;&#x2F;&gt;&lt;bl ver=&quot;2&quot; y=&quot;31.13&quot; z=&quot;11.16&quot; dp=&quot;5.00&quot; m=&quot;false&quot; name=&quot;Bore2&quot;&#x2F;&gt;&lt;bt ver=&quot;2&quot; x=&quot;258.56&quot; z=&quot;8.12&quot; dp=&quot;10.00&quot; m=&quot;false&quot; name=&quot;Bore14&quot;&#x2F;&gt;&lt;bb  ver=&quot;2&quot; x=&quot;258.58&quot; z=&quot;8.51&quot; dp=&quot;10.00&quot; m=&quot;false&quot; name=&quot;Bore3&quot;&#x2F;&gt;&lt;bf x=&quot;256.88&quot; y=&quot;40.82&quot; dp=&quot;10&quot; name=&quot;Bore10&quot;&#x2F;&gt;&lt;&#x2F;program&gt;">
+		<part id="1"/>
+	</operation>
+</project>

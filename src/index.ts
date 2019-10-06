@@ -654,8 +654,12 @@ class GibLabParser {
             if (item.typeId !== 'product') {
                 continue;
             }
-            for (let pid in item.part) {
-                let partItem = item.part[pid];
+            let parts = item.part;
+            if(!Array.isArray(parts)){
+                parts = [parts];
+            }
+            for (let pid in parts) {
+                let partItem = parts[pid];
                 let part = new Part();
                 part.length = +partItem.dl;
                 part.width = +partItem.dw;
