@@ -1,4 +1,4 @@
-import {GibLabParser, GoodsSync, PartList} from "../src/index"
+import {GibLabParser, GoodsSync, Part, PartList} from "../src/index"
 import { expect } from 'chai';
 import 'mocha';
 import * as fs from "fs";
@@ -147,5 +147,137 @@ describe('parse file', () => {
         });
 
 
+    });
+
+
+    it('Notch part side differentiation', () => {
+        let parser = new GibLabParser();
+        let filePath = "./tests/test04.project";
+        parser.run(filePath, (error: Error, result: PartList , goodsSync: Map<number, GoodsSync>) => {
+            let part = result[2];
+            expect(part.isNotch).to.equal(true);
+            expect(part.NotchExtra[0].getFace()).to.equal(true);
+            expect(part.NotchExtra[1].getFace()).to.equal(false);
+        });
+    });
+
+
+    it('Drill side selected by XNC', () => {
+        let parser = new GibLabParser();
+        let filePath = "./tests/test04.project";
+        parser.run(filePath, (error: Error, result: PartList , goodsSync: Map<number, GoodsSync>) => {
+            let part = result[2];
+            expect(part.isDrill).to.equal(true);
+            expect(part.DrillExtra.totalCount).to.equal(7);
+            expect(part.DrillExtra.countByDiam[8]).to.equal(3);
+            expect(part.DrillExtra.items[6].side).to.equal(5);
+
+            for(let idx in result){
+                if(result[idx].isDrill === true && result[idx].pos === 2){
+                    console.log(result[idx].pos);
+                    console.log(result[idx].DrillExtra);
+                }
+            }
+        });
+    });
+
+    it('Drill extra must not contain NaN', () => {
+        let parser = new GibLabParser();
+        let filePath = "./tests/test01.project";
+        parser.run(filePath, (error: Error, result: PartList , goodsSync: Map<number, GoodsSync>) => {
+
+            for(let idx in result){
+                if(result[idx].isDrill === true){
+                    for(let did in result[idx].DrillExtra.items){
+                        const item = result[idx].DrillExtra.items[did];
+                        expect(isNaN(item.side)).to.equal(false);
+                        expect(isNaN(item.repeatType)).to.equal(false);
+                        expect(isNaN(item.repDX)).to.equal(false);
+                        expect(isNaN(item.repDy)).to.equal(false);
+                        expect(isNaN(item.repCount)).to.equal(false);
+                        expect(isNaN(item.directionX)).to.equal(false);
+                        expect(isNaN(item.directionZ)).to.equal(false);
+                        expect(isNaN(item.x)).to.equal(false);
+                        expect(isNaN(item.y)).to.equal(false);
+                        expect(isNaN(item.z)).to.equal(false);
+                        expect(isNaN(item.depth)).to.equal(false);
+                        expect(isNaN(item.diameter)).to.equal(false);
+                    }
+
+                }
+            }
+        });
+        filePath = "./tests/test02.project";
+        parser.run(filePath, (error: Error, result: PartList , goodsSync: Map<number, GoodsSync>) => {
+
+            for(let idx in result){
+                if(result[idx].isDrill === true){
+                    for(let did in result[idx].DrillExtra.items){
+                        const item = result[idx].DrillExtra.items[did];
+                        expect(isNaN(item.side)).to.equal(false);
+                        expect(isNaN(item.repeatType)).to.equal(false);
+                        expect(isNaN(item.repDX)).to.equal(false);
+                        expect(isNaN(item.repDy)).to.equal(false);
+                        expect(isNaN(item.repCount)).to.equal(false);
+                        expect(isNaN(item.directionX)).to.equal(false);
+                        expect(isNaN(item.directionZ)).to.equal(false);
+                        expect(isNaN(item.x)).to.equal(false);
+                        expect(isNaN(item.y)).to.equal(false);
+                        expect(isNaN(item.z)).to.equal(false);
+                        expect(isNaN(item.depth)).to.equal(false);
+                        expect(isNaN(item.diameter)).to.equal(false);
+                    }
+
+                }
+            }
+        });
+        filePath = "./tests/test03.project";
+        parser.run(filePath, (error: Error, result: PartList , goodsSync: Map<number, GoodsSync>) => {
+
+            for(let idx in result){
+                if(result[idx].isDrill === true){
+                    for(let did in result[idx].DrillExtra.items){
+                        const item = result[idx].DrillExtra.items[did];
+                        expect(isNaN(item.side)).to.equal(false);
+                        expect(isNaN(item.repeatType)).to.equal(false);
+                        expect(isNaN(item.repDX)).to.equal(false);
+                        expect(isNaN(item.repDy)).to.equal(false);
+                        expect(isNaN(item.repCount)).to.equal(false);
+                        expect(isNaN(item.directionX)).to.equal(false);
+                        expect(isNaN(item.directionZ)).to.equal(false);
+                        expect(isNaN(item.x)).to.equal(false);
+                        expect(isNaN(item.y)).to.equal(false);
+                        expect(isNaN(item.z)).to.equal(false);
+                        expect(isNaN(item.depth)).to.equal(false);
+                        expect(isNaN(item.diameter)).to.equal(false);
+                    }
+
+                }
+            }
+        });
+        filePath = "./tests/test04.project";
+        parser.run(filePath, (error: Error, result: PartList , goodsSync: Map<number, GoodsSync>) => {
+
+            for(let idx in result){
+                if(result[idx].isDrill === true){
+                    for(let did in result[idx].DrillExtra.items){
+                        const item = result[idx].DrillExtra.items[did];
+                        expect(isNaN(item.side)).to.equal(false);
+                        expect(isNaN(item.repeatType)).to.equal(false);
+                        expect(isNaN(item.repDX)).to.equal(false);
+                        expect(isNaN(item.repDy)).to.equal(false);
+                        expect(isNaN(item.repCount)).to.equal(false);
+                        expect(isNaN(item.directionX)).to.equal(false);
+                        expect(isNaN(item.directionZ)).to.equal(false);
+                        expect(isNaN(item.x)).to.equal(false);
+                        expect(isNaN(item.y)).to.equal(false);
+                        expect(isNaN(item.z)).to.equal(false);
+                        expect(isNaN(item.depth)).to.equal(false);
+                        expect(isNaN(item.diameter)).to.equal(false);
+                    }
+
+                }
+            }
+        });
     });
 });

@@ -153,7 +153,7 @@ export class Part {
     isDrill: boolean = false;
     isGlue: boolean = false;
     isCNC: boolean = false;
-    DrillExtra: DrillParsed;
+    DrillExtra: DrillParsed = new DrillParsed();
     CncExtra: Array<CncItem> = [];
     NotchExtra: Array<NotchItem> = [];
     GlueUpExtra: GlueUpExtra = new GlueUpExtra();
@@ -520,7 +520,6 @@ class GibLabParser {
                     return;
                 }
                 part.isDrill = true;
-                const drill = new DrillParsed();
 
                 //drill face
                 if (program.bf !== undefined) {
@@ -532,14 +531,14 @@ class GibLabParser {
 
                         const drillData = bore[idx];
                         const point = new DrillPoint();
-                        point.side = FRONT;
+                        point.side = +item.side == 1 ? FRONT : BACK;
                         point.x = +drillData.x;
                         point.y = +drillData.y;
                         point.z = 0;
-                        point.depth = +drillData.dp;
+                        point.depth = variables[drillData.dp] === undefined ? +drillData.dp : variables[drillData.dp];
                         point.diameter = toolIndex[drillData.name];
                         point.corner.push(1);
-                        drill.add(point);
+                        part.DrillExtra.add(point);
                     }
 
                 }
@@ -559,10 +558,10 @@ class GibLabParser {
                         point.x = 0;
                         point.y = +drillData.y;
                         point.z = +drillData.z;
-                        point.depth = +drillData.dp;
+                        point.depth = variables[drillData.dp] === undefined ? +drillData.dp : variables[drillData.dp];;
                         point.diameter = toolIndex[drillData.name];
                         point.corner.push(2);
-                        drill.add(point);
+                        part.DrillExtra.add(point);
                     }
 
                 }
@@ -582,10 +581,10 @@ class GibLabParser {
                         point.x = +program.dx;
                         point.y = +drillData.y;
                         point.z = +drillData.z;
-                        point.depth = +drillData.dp;
+                        point.depth = variables[drillData.dp] === undefined ? +drillData.dp : variables[drillData.dp];;
                         point.diameter = toolIndex[drillData.name];
                         point.corner.push(4);
-                        drill.add(point);
+                        part.DrillExtra.add(point);
                     }
 
                 }
@@ -605,10 +604,10 @@ class GibLabParser {
                         point.x = +drillData.x;
                         point.y = 0;
                         point.z = +drillData.z;
-                        point.depth = +drillData.dp;
+                        point.depth = variables[drillData.dp] === undefined ? +drillData.dp : variables[drillData.dp];;
                         point.diameter = toolIndex[drillData.name];
                         point.corner.push(3);
-                        drill.add(point);
+                        part.DrillExtra.add(point);
                     }
 
                 }
@@ -628,15 +627,13 @@ class GibLabParser {
                         point.x = +drillData.x;
                         point.y = +program.dy;
                         point.z = +drillData.z;
-                        point.depth = +drillData.dp;
+                        point.depth = variables[drillData.dp] === undefined ? +drillData.dp : variables[drillData.dp];;
                         point.diameter = toolIndex[drillData.name];
                         point.corner.push(1);
-                        drill.add(point);
+                        part.DrillExtra.add(point);
                     }
 
                 }
-
-                part.DrillExtra = drill;
             });
         }
     }
