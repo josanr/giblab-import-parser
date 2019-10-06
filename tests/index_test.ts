@@ -66,16 +66,16 @@ describe('parse file', () => {
     });
 
 
-    it('XNC', () => {
-        let parser = new GibLabParser();
-        let filePath = "./tests/test01.project";
-        parser.run(filePath, (error: Error, result: PartList , goodsSync: Map<number, GoodsSync>) => {
-
-            console.log(JSON.stringify(result));
-        });
-
-
-    });
+    // it('XNC', () => {
+    //     let parser = new GibLabParser();
+    //     let filePath = "./tests/test01.project";
+    //     parser.run(filePath, (error: Error, result: PartList , goodsSync: Map<number, GoodsSync>) => {
+    //
+    //         console.log(JSON.stringify(result));
+    //     });
+    //
+    //
+    // });
 
 
     it('One element on map must not give error', () => {
@@ -119,6 +119,31 @@ describe('parse file', () => {
                     expect(result[idx].NotchExtra[1].getIndent()).to.equal(128);
                 }
             }
+        });
+
+
+    });
+
+
+    it('GlueUp data', () => {
+        let parser = new GibLabParser();
+        let filePath = "./tests/test04.project";
+        parser.run(filePath, (error: Error, result: PartList , goodsSync: Map<number, GoodsSync>) => {
+            let part = result[1];
+            expect(part.isGlue).to.equal(true);
+            expect(part.GlueUpExtra.type).to.equal('self');
+            expect(part.GlueUpExtra.out).to.equal(1);
+            part = result[4];
+            expect(part.isGlue).to.equal(true);
+            expect(part.GlueUpExtra.type).to.equal('secondary');
+            expect(part.GlueUpExtra.out).to.equal(0);
+            part = result[5];
+            expect(part.isGlue).to.equal(true);
+            expect(part.GlueUpExtra.type).to.equal('perim');
+            expect(part.GlueUpExtra.out).to.equal(1);
+            expect(part.GlueUpExtra.absL1).to.equal(7);
+            expect(part.GlueUpExtra.list).not.to.equal(0);
+
         });
 
 

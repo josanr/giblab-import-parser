@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as iconv from 'iconv-lite';
 import {parseString} from 'xml2js';
-import {isArray} from "util";
+
 
 
 const FRONT = 0;
@@ -153,7 +153,32 @@ export class Part {
     DrillExtra: DrillParsed;
     CncExtra:  Array<CncItem> = [];
     NotchExtra: Array<NotchItem> = [];
+    GlueUpExtra: GlueUpExtra = new GlueUpExtra();
 }
+
+class GlueUpExtra{
+
+    public static  TYPE_SELF = 'self';
+    public static  TYPE_SECONDARY = 'secondary';
+    public static  TYPE_PERIM = 'perim';
+
+
+    type: string = GlueUpExtra.TYPE_SELF;
+    out: number = 0;
+    absL1 : number = 0;
+    absL2 : number = 0;
+    absW1 : number = 0;
+    absW2 : number = 0;
+    triml1: boolean = true;
+    triml2: boolean = true;
+    trimw1: boolean = true;
+    trimw2: boolean = true;
+    list: Array<number> = [];
+
+
+
+}
+
 
 class CncItem {
     x: number;
@@ -607,6 +632,30 @@ class GibLabParser {
                 if (partItem.elr !== undefined) {
                     let opId = partItem.elr.split("#")[1];
                     part.W2 = this.goodsSyncList.get(edgeOps[opId]).modelId;
+                }
+                if(partItem.isGlueUp !== undefined){
+                    part.isGlue = (partItem.isGlueUp === 'true');
+                    part.GlueUpExtra.absL1 = part.L1;
+                    part.GlueUpExtra.absL2 = part.L2;
+                    part.GlueUpExtra.absW1 = part.W1;
+                    part.GlueUpExtra.absW2 = part.W2;
+
+                    part.L1 = 0;
+                    part.L2 = 0;
+                    part.W1 = 0;
+                    part.W2 = 0;
+
+                    if(partItem.glueUpType === GlueUpExtra.TYPE_SELF){
+                        part.GlueUpExtra.type = GlueUpExtra.TYPE_SELF;
+                        part.GlueUpExtra.out = Math.round(part.num / 2);
+
+                    }else if(partItem.glueUpType === GlueUpExtra.TYPE_PERIM){
+                        part.GlueUpExtra.type = GlueUpExtra.TYPE_PERIM;
+                        part.GlueUpExtra.out = part.num;
+                        part.GlueUpExtra.list.push(+partItem.glueupId);
+                    }else{
+                        part.GlueUpExtra.type = GlueUpExtra.TYPE_SECONDARY;
+                    }
                 }
 
                 this.partsList[part.pos] = part;
