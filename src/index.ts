@@ -3,7 +3,6 @@ import * as iconv from 'iconv-lite';
 import {parseString} from 'xml2js';
 
 
-
 const FRONT = 0;
 const RIGHT = 1;
 const TOP = 2;
