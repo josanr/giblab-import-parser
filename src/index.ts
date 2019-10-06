@@ -125,6 +125,10 @@ class NotchItem {
     getIndent(): number {
         return this.indent;
     }
+
+    getFace() {
+        return this.face;
+    }
 }
 
 export interface PartList {
