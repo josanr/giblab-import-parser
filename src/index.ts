@@ -654,6 +654,9 @@ class GibLabParser {
             if (item.typeId !== 'product') {
                 continue;
             }
+            if(item.part === undefined){
+                continue;
+            }
             let parts = item.part;
             if(!Array.isArray(parts)){
                 parts = [parts];
