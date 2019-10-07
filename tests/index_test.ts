@@ -11,8 +11,8 @@ describe('parse file', () => {
         let filePath = "./tests/test01.project";
         parser.run(filePath, (error: Error, result: PartList , goodsSync: Map<number, GoodsSync>) => {
             expect(error).to.equal(null);
-            expect(Object.keys(result).length).to.equal(80);
-            expect(goodsSync.size).to.equal(7);
+            expect(Object.keys(result).length).to.equal(141);
+            expect(goodsSync.size).to.equal(5);
         });
         filePath = "./tests/test02.project";
         parser.run(filePath, (error: Error, result: PartList , goodsSync: Map<number, GoodsSync>) => {
@@ -171,13 +171,6 @@ describe('parse file', () => {
             expect(part.DrillExtra.totalCount).to.equal(7);
             expect(part.DrillExtra.countByDiam[8]).to.equal(3);
             expect(part.DrillExtra.items[6].side).to.equal(5);
-
-            for(let idx in result){
-                if(result[idx].isDrill === true && result[idx].pos === 2){
-                    console.log(result[idx].pos);
-                    console.log(result[idx].DrillExtra);
-                }
-            }
         });
     });
 
