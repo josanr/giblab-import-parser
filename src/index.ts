@@ -4,10 +4,10 @@ import {parseString} from 'xml2js';
 
 
 const FRONT = 0;
-const RIGHT = 1;
-const TOP = 2;
-const LEFT = 3;
-const BOTTOM = 4;
+const RIGHT = 3;
+const TOP = 4;
+const LEFT = 1;
+const BOTTOM = 2;
 const BACK = 5;
 
 export class GoodsSync {
@@ -537,7 +537,7 @@ class GibLabParser {
                         point.z = 0;
                         point.depth = variables[drillData.dp] === undefined ? +drillData.dp : variables[drillData.dp];
                         point.diameter = toolIndex[drillData.name];
-                        point.corner.push(1);
+                        point.corner.push(+item.side == 1 ? 1 : 4);
                         part.DrillExtra.add(point);
                     }
 
@@ -560,7 +560,7 @@ class GibLabParser {
                         point.z = +drillData.z;
                         point.depth = variables[drillData.dp] === undefined ? +drillData.dp : variables[drillData.dp];
                         point.diameter = toolIndex[drillData.name];
-                        point.corner.push(2);
+                        point.corner.push(1);
                         part.DrillExtra.add(point);
                     }
 
@@ -606,7 +606,7 @@ class GibLabParser {
                         point.z = +drillData.z;
                         point.depth = variables[drillData.dp] === undefined ? +drillData.dp : variables[drillData.dp];
                         point.diameter = toolIndex[drillData.name];
-                        point.corner.push(3);
+                        point.corner.push(4);
                         part.DrillExtra.add(point);
                     }
 
