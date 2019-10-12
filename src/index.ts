@@ -720,7 +720,9 @@ class GibLabParser {
             if (item.typeId !== 'CS') {
                 continue;
             }
-
+            if(item.part === undefined){
+                continue;
+            }
             let gid = this.goodsSyncList.get(+item.material.id).modelId;
             let parts = item.part;
             if (!Array.isArray(parts)) {

@@ -66,18 +66,6 @@ describe('parse file', () => {
     });
 
 
-    // it('XNC', () => {
-    //     let parser = new GibLabParser();
-    //     let filePath = "./tests/test01.project";
-    //     parser.run(filePath, (error: Error, result: PartList , goodsSync: Map<number, GoodsSync>) => {
-    //
-    //         console.log(JSON.stringify(result));
-    //     });
-    //
-    //
-    // });
-
-
     it('One element on map must not give error', () => {
         let parser = new GibLabParser();
         let filePath = "./tests/test03.project";
@@ -143,7 +131,7 @@ describe('parse file', () => {
             expect(part.GlueUpExtra.out).to.equal(1);
             expect(part.GlueUpExtra.absL1).to.equal(7);
             expect(part.GlueUpExtra.list).not.to.equal(0);
-
+            console.log(result);
         });
 
 
@@ -171,6 +159,7 @@ describe('parse file', () => {
             expect(part.DrillExtra.totalCount).to.equal(7);
             expect(part.DrillExtra.countByDiam[8]).to.equal(3);
             expect(part.DrillExtra.items[6].side).to.equal(5);
+
         });
     });
 
@@ -282,5 +271,17 @@ describe('parse file', () => {
 
             expect(Object.keys(result).length).to.equal(1);
         });
+    });
+
+
+    it('Empty cut operation must not give error', () => {
+        let parser = new GibLabParser();
+        let filePath = "./tests/test06.project";
+        parser.run(filePath, (error: Error, result: PartList , goodsSync: Map<number, GoodsSync>) => {
+
+            expect(Object.keys(result).length).to.equal(60);
+        });
+
+
     });
 });
