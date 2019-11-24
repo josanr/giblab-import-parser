@@ -485,6 +485,15 @@ class GibLabParser {
                 const partId = +item.part.id;
                 const part = this.partsList[partId];
                 const program = result.program;
+
+                if (program.bf === undefined
+                    && program.bb === undefined
+                    && program.bt === undefined
+                    && program.bl === undefined
+                    && program.br === undefined
+                ) {
+                    return;
+                }
                 let dx = +program.dx;
                 let dy = +program.dy;
                 let dz = +program.dz;
@@ -511,14 +520,6 @@ class GibLabParser {
                     }
                 }
 
-                if (program.bf === undefined
-                    && program.bb === undefined
-                    && program.bt === undefined
-                    && program.bl === undefined
-                    && program.br === undefined
-                ) {
-                    return;
-                }
                 part.isDrill = true;
 
                 //drill face

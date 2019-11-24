@@ -467,7 +467,7 @@
         <part id="59"/>
     </operation>
     <operation typeId="XNC" id="68" side="1" bySizeDetail="true" code="0009x060x1" typeName="¹9 polita"
-               program="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;program dx=&quot;1201.00&quot; dy=&quot;200.00&quot; dz=&quot;18.00&quot;&gt;&lt;tool name=&quot;Bore5&quot; d=&quot;5&quot;&#x2F;&gt;&lt;bt ver=&quot;2&quot; x=&quot;50&quot; z=&quot;9&quot; dp=&quot;34.00&quot; m=&quot;true&quot; name=&quot;Bore5&quot;&#x2F;&gt;&lt;bt ver=&quot;2&quot; x=&quot;417&quot; z=&quot;9&quot; dp=&quot;34.00&quot; m=&quot;true&quot; name=&quot;Bore5&quot;&#x2F;&gt;&lt;bt ver=&quot;2&quot; x=&quot;784&quot; z=&quot;9&quot; dp=&quot;34.00&quot; m=&quot;true&quot; name=&quot;Bore5&quot;&#x2F;&gt;&lt;bt ver=&quot;2&quot; x=&quot;1151&quot; z=&quot;9&quot; dp=&quot;34.00&quot; m=&quot;true&quot; name=&quot;Bore5&quot;&#x2F;&gt;&lt;bl ver=&quot;2&quot; y=&quot;50&quot; z=&quot;9&quot; dp=&quot;34.00&quot; m=&quot;true&quot; name=&quot;Bore5&quot;&#x2F;&gt;&lt;bl ver=&quot;2&quot; y=&quot;150&quot; z=&quot;9&quot; dp=&quot;34.00&quot; m=&quot;true&quot; name=&quot;Bore5&quot;&#x2F;&gt;&lt;br ver=&quot;2&quot; y=&quot;50&quot; z=&quot;9&quot; dp=&quot;34.00&quot; m=&quot;true&quot; name=&quot;Bore5&quot;&#x2F;&gt;&lt;br ver=&quot;2&quot; y=&quot;150&quot; z=&quot;9&quot; dp=&quot;34.00&quot; m=&quot;true&quot; name=&quot;Bore5&quot;&#x2F;&gt;&lt;&#x2F;program&gt;">
+               program="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;program dx=&quot;1201.00&quot; dy=&quot;200.00&quot; dz=&quot;18.00&quot;&gt;&lt;&#x2F;program&gt;">
         <part id="60"/>
     </operation>
 </project>
