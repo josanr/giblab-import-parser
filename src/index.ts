@@ -715,9 +715,12 @@ class GibLabParser {
                 this.partsList[part.pos] = part;
             }
         }
-
-        for (let idx in data.project.operation) {
-            const item = data.project.operation[idx];
+        let ops = data.project.operation;
+        if (!Array.isArray(ops)) {
+            ops = [ops];
+        }
+        for (let idx in ops) {
+            const item = ops[idx];
             if (item.typeId !== 'CS') {
                 continue;
             }
