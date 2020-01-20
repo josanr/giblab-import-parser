@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<project importBMV="1.78">
+    <good typeId="product" id="1" count="1" name="01-319 RO Bivol" code="">
+        <part id="1" name="№1 dvp" dl="1205" dw="655" count="1" txt="true" code="1" part.code="1"/>
+        <part id="2" name="№2 dvp" dl="2094" dw="311" count="1" txt="true" code="2" part.code="2"/>
+        <part id="3" name="№3 dvp" dl="2092" dw="259" count="1" txt="true" code="3" part.code="3"/>
+        <part id="4" name="№4 Вертикальная" dl="593" dw="290" count="1" txt="true" code="4" part.code="4"/>
+    </good>
+    <good typeId="tool.cutting" id="2"/>
+    <good typeId="sheet" id="3" t="3" name="ДВП/HDF 101К бел 2.85*2.07=5.9-14149">
+        <part id="5" count="10000" l="2750" w="1830"/>
+    </good>
+    <operation typeId="CS" id="1" tool1="2" cSizeMode="1">
+        <material id="3"/>
+        <part id="1"/>
+        <part id="2"/>
+        <part id="3"/>
+        <part id="4"/>
+    </operation>
+</project>

@@ -284,4 +284,18 @@ describe('parse file', () => {
 
 
     });
+
+
+    it('Single operation must be parsed correctly', () => {
+        let parser = new GibLabParser();
+        let filePath = "./tests/test07.project";
+        parser.run(filePath, (error: Error, result: PartList , goodsSync: Map<number, GoodsSync>) => {
+
+            for(let idx in result){
+                expect(result[idx].gid).to.greaterThan(0);
+            }
+        });
+
+
+    });
 });
